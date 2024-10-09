@@ -23,7 +23,7 @@ Precheck() {
 		if [ ! -e $file ]; then
 			case "${file}" in
 			"Caddyfile" | "xray/config.json" | "docker-compose.yml")
-				curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/${file}"
+				curl -sO "https://raw.githubusercontent.com/emfy0/xtls-dockerized/main/${file}"
 				;;
 			".settings")
 				touch $file
@@ -33,7 +33,7 @@ Precheck() {
 		fi
 	done
 
-	curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/decoy-website.tar.gz"
+	curl -sO "https://raw.githubusercontent.com/emfy0/xtls-dockerized/main/decoy-website.tar.gz"
 	mkdir site
 	tar -zxf ./decoy-website.tar.gz -C site
 	mv site/decoy-website/* site/
