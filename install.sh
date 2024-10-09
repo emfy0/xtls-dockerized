@@ -3,7 +3,7 @@ DEST_PATH="TEST"
 
 Precheck() {
 	DOCKER_V=$(docker -v | grep -i "version")
-	DOCKER_COMPOSE_V=$(docker-compose -v | grep -i "version")
+	DOCKER_COMPOSE_V=$(docker compose -v | grep -i "version")
 	if [ -z "$DOCKER_V" ] || [ -z "$DOCKER_COMPOSE_V" ]; then
 		echo "Docker or docker-compose not found. ";
 		exit 0
@@ -276,9 +276,9 @@ Update() {
 	case "${1}" in
 	"caddy" | "xray")
 		#docker-compose stop $1
-		docker-compose rm -s $1
+		docker compose rm -s $1
 		docker rmi $imageID
-		docker-compose up -d $1
+		docker compose up -d $1
 		;;
 	"acme")
 		echo "Emmmm"
@@ -294,17 +294,8 @@ Install() {
 	ChangeCaddy
 	ChangeUUID
 	ChangeFlow
-	docker-compose down
-	docker-compose up -d
-
-	sed -i.old '/^.*restart xray.*/d' /var/spool/cron/crontabs/"$(whoami)"
-	if [ -e "/usr/bin/docker-compose" ]; then
-		DockerComposePath="/usr/bin/docker-compose"
-		echo "0 0 * * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
-	elif [ -e "/usr/local/bin/docker-compose" ]; then
-		DockerComposePath="/usr/local/bin/docker-compose"
-		echo "0 0 * * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
-	fi
+	docker compose down
+	docker compose up -d
 
 	ShowLink
 }
@@ -312,7 +303,7 @@ Install() {
 Remove() {
 	Precheck 3
 	sed -i '/caddy-xtls/d' /var/spool/cron/crontabs/"$(whoami)"
-	docker-compose down --rmi all
+	docker compose down --rmi all
 }
 
 main() {
